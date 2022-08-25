@@ -49,7 +49,7 @@ button2.apply {[
 
 Calling `apply` will automatically take care of the layout for you. That's it! 
 
-## UIView Functions
+## UIView Convienence Functions
 `setSizeEqual(to view: UIView)` 
 - Sets the caller's size equal to the passed in view
 
