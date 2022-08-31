@@ -5,6 +5,26 @@
 import Foundation
 import UIKit
 
+public struct Paver {
+  public let size: UIView.Size
+  public let alignment: UIView.Alignment
+  public let center: UIView.Center
+  
+  internal init(size: UIView.Size,
+               alignment: UIView.Alignment,
+               center: UIView.Center) {
+    self.size = size
+    self.alignment = alignment
+    self.center = center
+  }
+  
+  internal init(view: UIView) {
+    self.size = UIView.Size.init(view: view)
+    self.alignment = UIView.Alignment.init(view: view)
+    self.center = UIView.Center.init(view: view)
+  }
+}
+
 public extension UIView {
   enum AnchorDimension {
     case leading, trailing, top, bottom, x, y
@@ -59,9 +79,7 @@ public extension UIView {
     }
   }
   
-  var center: Center { .init(view: self) }
-  var size: Size { .init(view: self) }
-  var aligment: Alignment { .init(view: self) }
+  var paver: Paver { Paver(view: self) }
   
   private func prepare() {
     if translatesAutoresizingMaskIntoConstraints == true {
@@ -70,33 +88,33 @@ public extension UIView {
   }
   
   func setSizeEqual(to view: UIView) {
-    apply { [
-      aligment.leading.to(view),
-      aligment.trailing.to(view),
-      aligment.top.to(view),
-      aligment.bottom.to(view)
+    apply { paver in [
+      paver.alignment.leading.to(view),
+      paver.alignment.trailing.to(view),
+      paver.alignment.top.to(view),
+      paver.alignment.bottom.to(view)
     ] }
   }
   
   func setSizeEqual(to size: CGSize) {
-    apply { [
-      self.size.width.constant(size.width),
-      self.size.height.constant(size.height)
+    apply { paver in [
+      paver.size.width.constant(size.width),
+      paver.size.height.constant(size.height)
     ] }
   }
   
   func center(in view: UIView, size: CGSize) {
-    apply { [
-      center.y.to(view),
-      center.x.to(view),
-      self.size.width.constant(size.width),
-      self.size.height.constant(size.height)
+    apply { paver in [
+      paver.center.y.to(view),
+      paver.center.x.to(view),
+      paver.size.width.constant(size.width),
+      paver.size.height.constant(size.height)
     ] }
   }
   
-  func apply(_ constraints: () -> [NSLayoutConstraint?]) {
+  func apply(_ constraints: (_ paver: Paver) -> [NSLayoutConstraint?]) {
     prepare()
-    let applicableConstraints = constraints().compactMap { $0 }
+    let applicableConstraints = constraints(paver).compactMap { $0 }
     NSLayoutConstraint.activate(applicableConstraints)
   }
 }

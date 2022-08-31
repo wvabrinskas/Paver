@@ -29,23 +29,23 @@ view.addSubview(button2)
 Once the views are created you can simply call `apply()` on the new views to set the constraints: 
 
 ```
-button.apply {[
-    button.size.height.constant(50),
-    button.size.width.constant(100),
-    button.center.x.to(view),
-    button.center.y.to(view)
+button.apply { paver in [
+    paver.size.height.constant(50),
+    paver.size.width.constant(100),
+    paver.center.x.to(view),
+    paver.center.y.to(view)
 ]}
 
-button2.apply {[
-    button2.size.height.constant(50),
-    button2.size.width.constant(100),
-    button2.center.x.to(view),
-    button2.aligment.top.to(button, constant: 50)
+button2.apply { paver in [
+    paver.size.height.constant(50),
+    paver.size.width.constant(100),
+    paver.center.x.to(view),
+    paver.aligment.top.to(button, constant: 50)
 ]}
 ```
 
 `apply` is a function extension on UIView
-`func apply(_ constraints: () -> [NSLayoutConstraint?]) {` that takes in a block that expects an array of `NSLayoutConstraint` as a return value. 
+`func apply(_ constraints: (_ paver: Paver) -> [NSLayoutConstraint?]) {` that takes in a block that expects an array of `NSLayoutConstraint` as a return value. 
 
 Calling `apply` will automatically take care of the layout for you. That's it! 
 
